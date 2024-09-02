@@ -1,0 +1,72 @@
+---
+title: "st558 hw2"
+format: html
+editor: visual
+---
+
+## Task 1
+Creating the initial treatment vectors
+```{r}
+pre_treat <- c(120, 151, 125, 126, 115, 132, 132, 129, 134, 139, 127, 122, 127, 135, 133, 128, 147, 138, 140, 132)
+post_treat <- c(127, 145, 135, 122, 115, 122, 123, 126, 126, 129, 132, 146, 120, 114, 121, 120, 128, 120, 133, 115)
+vec_names <- paste("Subject", 1:20, sep = "_")
+names(pre_treat) <- vec_names
+names(post_treat) <- vec_names
+```
+Calculating the difference between the vectors
+```{r}
+diff_treat <- pre_treat - post_treat
+mean(diff_treat)
+```
+Determining which values are negative
+```{r}
+which(diff_treat > 0)
+diff_pos <- diff_treat[-c(1,3,5,11,12)]
+mean(diff_pos)
+```
+
+## Task 2
+Creating the treatment data frame
+```{r}
+bp_df <- data.frame("patient" = vec_names, "pre_bp" = pre_treat, "post_bp" = post_treat, "diff_bp" = diff_treat)
+bp_df[which(bp_df$diff_bp < 0), 1:4]
+```
+Adding a column to the data frame
+```{r}
+bp_df$lt_120 <- bp_df$post_bp < 120
+knitr::kable(bp_df)
+```
+
+## Task 3
+Creating the placebo data frame
+```{r}
+pre_plac <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+post_plac <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+vec_names2 <- paste("Subject", 1:10, sep = "_")
+names(pre_plac) <- vec_names2
+names(post_plac) <- vec_names2
+diff_plac <- pre_plac - post_plac
+bp_df2 <- data.frame("patient" = vec_names2, "pre_bp" = pre_plac, "post_bp" = post_plac, "diff_bp" = diff_plac)
+bp_df2$lt_120 <- bp_df2$post_bp < 120
+```
+Creating a list with both data frames
+```{r}
+bp_list <- list("treatment" = bp_df, "placebo" = bp_df2)
+```
+Indexing the list
+```{r}
+bp_list[1]
+bp_list["treatment"]
+bp_list$treatment
+```
+Accessing a specific item in the list
+```{r}
+bp_list$placebo$pre_bp
+```
+
+
+
+
+
+
+
